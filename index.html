@@ -30,7 +30,7 @@
     .todoListMain .header button:hover {
       background-color: #003399;
       border: 2px solid #003399;
-      cursor: pointer; 
+      cursor: pointer;
     }
   </style>
 </head>
@@ -42,12 +42,38 @@
     var destination = document.querySelector('#container');
 
     var TodoList = React.createClass({
+          getInitialState: function() {
+            return {
+              items: []
+            };
+          },
+          addItem: function(e) {
+            var itemArray = this.state.items;
+
+            itemArray.push(
+              {
+                text: this._inputElement.value,
+                key: Date.now() //stores current time. unique key entry
+                //this unique value will identify each generated UI element
+                //date.now() ensures a certain level of uniqueness.
+              }
+            );
+
+            this.setState({
+                items: itemArray
+            });
+
+            this._inputElement.value = "";
+
+            e.preventDefault();
+          },
           render: function() {
             return (
               <div className="todoListMain">
                 <div className="header">
-                  <form>
-                    <input placeholder="enter task">
+                  <form onSubmit={this.addItem}>
+                    <input ref={(a) => this._inputElement = a}
+                      placeholder="enter task">
                     </input>
                     <button type="submit">Add</button>
                   </form>
